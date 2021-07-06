@@ -41,15 +41,15 @@ app.use(methodOverride('_method'))
 
 //Setup nodemailer
 
-const nodemailerFrom = "loggskey1@gmail.com"
+const nodemailerFrom = process.env.EMAIL
 const nodemailerObject = {
     service:"gmail",
     host:"smtp.gmail.com",
     port:465,
     secure:true,
     auth:{
-        user:"loggskey1@gmail.com",
-        pass:"GmAiLfOrFaIz"
+        user:process.env.EMAIL,
+        pass: process.env.PASS
     }
 }
 
@@ -58,14 +58,14 @@ app.use(session({
     secret:"secret key",
     resave:false,
     saveUninitialized:false,
-    cookie:{secure:true}
+   //cookie:{secure:true}
 }))
 var mainURL = "http://localhost:3000"
 
-app.use(function(request,result,next){
-    request.mainURL = mainURL
-    request.isLogin = (typeof request.session.user !== "undefined")
-    request.user = request.session.user
+app.use(function(req,res,next){
+    req.mainURL = mainURL
+    req.isLogin = (typeof req.session.user !== "undefined")
+    req.user = req.session.user
 
     next()
 })
@@ -206,9 +206,10 @@ http.listen(3000,function(){
     app.post('/Login',async (req,res)=>{
         const email = req.body.email
         const password = req.body.password
-
+        
         const user = await users.findOne({"email":email})
-
+        //console.log(email)
+        //console.log(user)
         if(user == null){
             req.status = "error";
             req.message = "Email does not exist";
@@ -222,15 +223,22 @@ http.listen(3000,function(){
                 if(user.isVerified){
                     req.session.user = user
                     res.redirect('/')
+                    console.log(req)
                     return false
                 }
-
-                req.status = "error"
+                req.status = "error";
+                req.message = "Kindly verify your email"
+                res.render("Login",{
+                    "request":req
+                })
+                return false
+            }
+                
+                req.status = "404"
                 req.message = "Password is not correct"
                 res.render('Login',{
                     "request":req
                 })
-            }
         })
     })
 
@@ -383,4 +391,9 @@ http.listen(3000,function(){
         })
     })
     
+
+    app.get('/Logout', (req,res)=>{
+        req.session.destroy();
+        res.redirect("/")
+    })
 })

@@ -3,14 +3,14 @@
     <%- include('./partials/ResponseAlert',{
         "request":request
     }) %> 
-
+    
     <div class="row">
         <div class="col-md-12">
             <form action="<%= request.mainURL%>/Login" method="POST">
                 
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1">Email</span>
-                    <input type="email" class="form-control" placeholder="abc@xyz.com " name="email" required >
+                    <input type="email" class="form-control" placeholder="abc@xyz.com" name="email" required >
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1">Password</span>

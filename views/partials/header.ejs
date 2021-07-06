@@ -8,7 +8,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="<%= request.mainURL  %> ">Home<span class="sr-only">(current)</span></a>
+            <a class="nav-link active" aria-current="page" href="<%= request.mainURL%> ">Home</a>
           </li>
           
           <li class="nav-item">
@@ -20,13 +20,14 @@
           </li>
           
           <% if(request.isLogin){%>
+            
             <li class="nav-item dropdown">
-                <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   <%= request.session.user.name  %> 
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a href="<%= request.mainURL%>/Logout" class="dropdown-item">Log out</a>
-                </div>
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                <%= request.session.user.name %> 
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="<%= request.mainURL%>/Logout">Logout</a></li>
+              </ul>
             </li>
 
           <% }else{ %> 
