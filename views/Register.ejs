@@ -1,0 +1,26 @@
+
+<div class="container" style="margin-top: 50px;">
+    <%- include('./partials/ResponseAlert',{
+        "request":request
+    }) %> 
+    
+    <div class="row">
+        <div class="col-md-12">
+            <form action="<%= request.mainURL%>/Register" method="POSt">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Name</span>
+                    <input type="text" class="form-control" placeholder="Username" name="name" required >
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Email</span>
+                    <input type="email" class="form-control" placeholder="abc@xyz.com " name="email" required >
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Password</span>
+                    <input type="password" class="form-control" placeholder="password" name="password" required >
+                </div>
+                <input type="submit" value="Register" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>

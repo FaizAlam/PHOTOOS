@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="<%= request.maiURL%> ">File Sharer</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="<%= request.mainURL  %> ">Home<span class="sr-only">(current)</span></a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="<%= request.mainURL %> ">My Uploads</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="<%= request.mainURL %>">Shared with me</a>
+          </li>
+          
+          <% if(request.isLogin){%>
+            <li class="nav-item dropdown">
+                <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   <%= request.session.user.name  %> 
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a href="<%= request.mainURL%>/Logout" class="dropdown-item">Log out</a>
+                </div>
+            </li>
+
+          <% }else{ %> 
+            <li class="nav-item">
+                <a href="<%= request.mainURL%>/Login " class="nav-link">Login</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="<%= request.mainURL%>/Register " class="nav-link">Register</a>
+            </li>
+          <% } %> 
+        </ul>
+      </div>
+    </div>
+  </nav>
