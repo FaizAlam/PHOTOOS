@@ -1,0 +1,46 @@
+
+<div class="container" style="margin-top: 50px;">
+    <%- include('./partials/ResponseAlert',{
+        "request":request
+    }) %> 
+    <div class="row">
+        <div class="col-md-4">
+            <h1>
+                <% if(folderName == "") {%>
+                    My Uploads
+                <% }else{ %>
+                    <% =folderName %>   
+                <% } %> 
+            </h1>
+        </div>
+
+        <% if(createdAt !=""){ %>
+            <div class="col-md-4">
+                Created at:
+                <%
+                createdAt = new Date(createdAt)
+                createdAt = createdAt.getDate()+" "+months[createdAt.getMonth()]+","+createdAt.getFullYear()+" "+createdAt.getHours()+":"+ createdAt.getMinutes()+":"+ createdAt.getSeconds();
+                %> 
+                <%= createdAt %> 
+            </div> 
+        <% } %> 
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary" onclick="onclickCreateFolder()">Create folder</button>
+        </div>
+    </div>
+</div>
+
+<form action="<%= request.mainURL%>/CreateFolder" id="form-create-folder" method="POST">
+    <input type="hidden" name="name" required>
+    <input type="hidden" name="_id" value="<%= _id %>"> 
+</form>
+
+<script>
+    function onclickCreateFolder(){
+        const folderName = prompt("please enter folder name","")
+        if(folderName !=null){
+            document.getElementById("form-create-folder").name.value =folderName;
+            document.getElementById("form-create-folder").submit()
+        }
+    }
+</script>
