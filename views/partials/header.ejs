@@ -6,7 +6,7 @@ months = ["January","February","March","April","May","June","July","August","Sep
 %> 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="<%= request.maiURL%> ">File Sharer</a>
+      <a class="navbar-brand" href="<%= request.maiURL%>">File Sharer</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -18,11 +18,11 @@ months = ["January","February","March","April","May","June","July","August","Sep
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" href="<%= request.mainURL %> ">My Uploads</a>
+            <a class="nav-link" href="<%= request.mainURL %>/MyUploads">My Uploads</a>
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" href="<%= request.mainURL %>">Shared with me</a>
+            <a class="nav-link" href="<%= request.mainURL %>/SharedWithMe">Shared with me</a>
           </li>
           
           <% if(request.isLogin){%>

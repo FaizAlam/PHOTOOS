@@ -14,9 +14,15 @@ const httpObj = require('http')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const users = require('./model/user')
+const multer = require('multer')
+const {GridFsStorage} = require('multer-gridfs-storage')
+const Grid = require('gridfs-stream')
+const crypto = require('crypto')
+const path = require('path')
 
 
 const http = httpObj.createServer(app)
+
 
 
 //DATABASE
@@ -24,6 +30,42 @@ mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser:true,useUnifiedTopolo
 const db = mongoose.connection
 db.on('error',error=>console.error(error))
 db.once('open',()=>console.log("database connected"))
+
+const conn = mongoose.createConnection(process.env.DATABASE_URL2,{
+   useNewUrlParser:true,
+   useUnifiedTopology:true
+})
+
+let gfs
+//init gfs
+conn.once('open',()=>{
+    //init stream
+    gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+        bucketName: "uploads"
+      });
+})
+//create storage engine
+
+var storage = new GridFsStorage({
+    url: process.env.DATABASE_URL2,
+    file: (req, file) => {
+      return new Promise((resolve, reject) => {
+        crypto.randomBytes(16, (err, buf) => {
+          if (err) {
+            return reject(err);
+          }
+          const filename = buf.toString('hex') + path.extname(file.originalname);
+          const fileInfo = {
+            filename: filename,
+            bucketName: 'uploads'
+          };
+          resolve(fileInfo);
+        });
+      });
+    }
+  });
+  const upload = multer({ storage:storage });
+
 
 
 //middelwares
@@ -36,7 +78,7 @@ app.use('/public/js',express.static(__dirname+"/public/js"))
 app.use(express.static('./public'))
 app.use(expressLayouts)
 app.use(bodyParser.urlencoded())
-app.use(methodOverride('_method'))
+//app.use(methodOverride('_method'))
 //app.use(formidable())
 
 //Setup nodemailer
@@ -48,7 +90,7 @@ const nodemailerObject = {
     port:465,
     secure:true,
     auth:{
-        user:process.env.EMAIL,
+        user:process.env.MAIL,
         pass: process.env.PASS
     }
 }
@@ -72,6 +114,18 @@ app.use(function(req,res,next){
 
 http.listen(3000,function(){
     console.log("Server Started at "+mainURL)
+    
+    //my uploads 
+    app.get('/MyUploads', async (req,res)=>{
+        res.render("MyUploads",{
+            "request":req
+        })
+    })
+
+    //upload files
+    app.post("/upload", upload.single('file'),(req,res)=>{
+        res.json({file:req.file})
+    })
 
     //home page
     app.get('/',(req,res)=>{
@@ -153,7 +207,6 @@ http.listen(3000,function(){
     })
 
 
-
     //Verfiying link
     app.get('/verifyEmail/:email/:verification_token', async (req,res)=>{
         
@@ -223,7 +276,7 @@ http.listen(3000,function(){
                 if(user.isVerified){
                     req.session.user = user
                     res.redirect('/')
-                    console.log(req)
+                    //console.log(req)
                     return false
                 }
                 req.status = "error";
@@ -301,6 +354,7 @@ http.listen(3000,function(){
 
     })
 
+    //Reset Password page
     app.get("/ResetPassword/:email/:reset_token",async (req,res)=>{
         const email = req.params.email
         const reset_token = req.params.reset_token
@@ -329,6 +383,7 @@ http.listen(3000,function(){
         })
     })
 
+    //Reset password post
     app.post('/ResetPassword',async (req,res)=>{
         const email = req.body.email
         const reset_token = req.body.reset_token
@@ -391,7 +446,7 @@ http.listen(3000,function(){
         })
     })
     
-
+    //Logout
     app.get('/Logout', (req,res)=>{
         req.session.destroy();
         res.redirect("/")

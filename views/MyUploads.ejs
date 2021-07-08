@@ -5,42 +5,25 @@
     }) %> 
     <div class="row">
         <div class="col-md-4">
-            <h1>
-                <% if(folderName == "") {%>
-                    My Uploads
-                <% }else{ %>
-                    <% =folderName %>   
-                <% } %> 
-            </h1>
+            <h2 class="text-center display-4 my-4">Mongo File Uploads</h2>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" name="file" id="file">
+                   
+                </div>
+                <div class="d-grid gap-2">
+                <input type="submit" value="submit" class="btn btn-primary btn-block">
+                </div>
+            </form>
+
         </div>
 
-        <% if(createdAt !=""){ %>
-            <div class="col-md-4">
-                Created at:
-                <%
-                createdAt = new Date(createdAt)
-                createdAt = createdAt.getDate()+" "+months[createdAt.getMonth()]+","+createdAt.getFullYear()+" "+createdAt.getHours()+":"+ createdAt.getMinutes()+":"+ createdAt.getSeconds();
-                %> 
-                <%= createdAt %> 
-            </div> 
-        <% } %> 
-        <div class="col-md-4">
-            <button type="button" class="btn btn-primary" onclick="onclickCreateFolder()">Create folder</button>
-        </div>
+       
+        
     </div>
 </div>
 
 <form action="<%= request.mainURL%>/CreateFolder" id="form-create-folder" method="POST">
     <input type="hidden" name="name" required>
-    <input type="hidden" name="_id" value="<%= _id %>"> 
+   
 </form>
-
-<script>
-    function onclickCreateFolder(){
-        const folderName = prompt("please enter folder name","")
-        if(folderName !=null){
-            document.getElementById("form-create-folder").name.value =folderName;
-            document.getElementById("form-create-folder").submit()
-        }
-    }
-</script>

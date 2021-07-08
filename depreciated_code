@@ -1,0 +1,174 @@
+
+//recursive function to get the folder from uploaded
+function recursiveGetFolder(files,id){
+    const singleFolder = null
+
+    for (var a =0;a<files.length;a++){
+        const file = files[a]
+
+        //return if file type is folder and ID is found
+        if(file.type=="folder"){
+            if(file.id==id){
+                return file
+            }
+            //if it has files, then do the recursion
+
+            if(file.files.length > 0){
+                singleFile = recursiveGetFolder(file.files,id)
+                //return the file if found in sub-folders
+                if(singleFile !=null){
+                    return singleFile
+                }
+            }
+        }
+
+    }
+}
+
+
+//function to add new uploaded object and return the updated array
+function getUpdatedArray(arr,id,uploadedObj){
+    for(var a = 0; a<arr.length;a++){
+        //push in files array if type is folder and ID is found
+        if(arr[a].type =="folder"){
+            if(arr[a].id==id){
+                arr[a].files.push(uploadedObj);
+                arr[a].id = ObjectId(arr[a].id)
+            }
+
+            //if it has files, then do the recursion
+            if(arr[a].files.length >0){
+                arr[a].id = ObjectId(arr[a].id)
+                getUpdatedArray(arr[a].files,id,uploadedObj)
+            }
+        }
+    }
+    return arr;
+}
+
+
+app.post("/CreateFolder", async (req,res)=>{
+        const name = req.body.name
+        const id = req.body.id
+
+        if(req.session.user){
+            const user = await users.findOne({
+                "id":ObjectId(req.session.user.id)
+            })
+
+            const uploadedObj ={
+                "id":ObjectId(),
+                "type":"folder",
+                "folderName":name,
+                "files":[],
+                "folderPath":"",
+                "createdAt":new Date().getTime()
+            }
+
+            const folderPath = ""
+            const updatedArray = []
+            if(id==""){
+                folderPath = "public/uploads/"+user.email + "/"+name
+                uploadedObj.folderPath = folderPath
+
+                if(!FileSystem.existsSync("public/uploads/" + user.email)){
+                    filesystem.mkdirSync("public/uploads"+user.email)
+                }
+            }else{
+                const folderObj = await recursiveGetFolder(user.uploaded,id)
+                uploadedObj.folderPath = folderObj.folderPath +"/"+name;
+                updatedArray = await getUpdatedArray(user.uploaded,id,uploadedObj)
+            }
+
+            if(uploadedObj.folderPath == ""){
+                req.session.status = "error"
+                req.session.message="Folder name must not be empty"
+                res.redirect("/MyUploads")
+                return false
+            }
+
+            if(fileSystem.existsSync(uploadedObj.folderPath)){
+                req.session.status = "error"
+                req.session.message="Folder with same name already exist"
+                res.redirect("/MyUploads")
+                return false
+            }
+
+            fileSystem.mkdirSync(uploadedObj.folderPath)
+
+            if(id ==""){
+                await users.updateOne({
+                    "id":ObjectId(req.session.user.id)
+                },{
+                    $push:{
+                        "uploaded":uploadedObj
+                    }
+                })
+            }else{
+                for (var a=0;a<updatedArray.length; a++){
+                    updatedArray[a].id=ObjectId(updatedArray[a].id)
+                }
+
+                await users.updateOne({
+                    "id":ObjectId(req.session.user.id)
+                },{
+                    $set:{
+                        "uploaded":updatedArray
+                    }
+                })
+
+                res.redirect("/MyUploads/"+id);
+                return false
+            }
+            res.redirect("/Login")
+        }
+    })
+
+
+
+MyUploads/:id
+
+
+const id = req.params.id
+        console.log(id)
+        if(req.session.user){
+            const user = await users.findOne({"id":(req.session.user.id)})
+            console.log(user)
+            const uploaded = null
+            const folderName = ''
+            const createdAt = ''
+            if(typeof id == "undefined"){
+                uploaded = user.uploaded
+            }else{
+                const folderObj = await recursiveGetFolder(user.uploaded, id);
+                if(folderObj == null){
+                    req.status = "error"
+                    req.message = "Folder not found"
+                    res.render("MyUploads",{
+                        "request":req
+                    })
+                    return false
+                }
+                uploaded = folderObj.files
+                folderName = folderObj.folderName
+                createdAt = folderObj.createdAt
+            }
+
+            if(uploaded == null){
+                req.status = "error"
+                req.message = "Directory not found"
+                res.render("MyUploads",{
+                    "request":req
+                })
+                return false
+            }
+            res.render("MyUploads",{
+                "request":req,
+                "uploaded":uploaded,
+                "id":id,
+                "folderName":folderName,
+                "createdAt":createdAt
+            })
+            return false
+        }
+        
