@@ -27,8 +27,13 @@ const userSchema = new mongoose.Schema({
     verification_token:{
         type:Date,
         default:Date.now()
-    }
-
+    },
+    uploads :[{
+        fileName :{type:String},
+        secureURL : {type:String},
+        createdAt : {type:Date}
+    }]
+    
 })
 
 module.exports = mongoose.model("users",userSchema)

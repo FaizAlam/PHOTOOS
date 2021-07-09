@@ -14,11 +14,13 @@ const httpObj = require('http')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const users = require('./model/user')
-const multer = require('multer')
-const {GridFsStorage} = require('multer-gridfs-storage')
-const Grid = require('gridfs-stream')
+//const multer = require('multer')
+//const {GridFsStorage} = require('multer-gridfs-storage')
+//const Grid = require('gridfs-stream')
 const crypto = require('crypto')
 const path = require('path')
+const cloudinary = require('./utils/cloudinary')
+const upload = require('./utils/multer')
 
 
 const http = httpObj.createServer(app)
@@ -30,42 +32,6 @@ mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser:true,useUnifiedTopolo
 const db = mongoose.connection
 db.on('error',error=>console.error(error))
 db.once('open',()=>console.log("database connected"))
-
-const conn = mongoose.createConnection(process.env.DATABASE_URL2,{
-   useNewUrlParser:true,
-   useUnifiedTopology:true
-})
-
-let gfs
-//init gfs
-conn.once('open',()=>{
-    //init stream
-    gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-        bucketName: "uploads"
-      });
-})
-//create storage engine
-
-var storage = new GridFsStorage({
-    url: process.env.DATABASE_URL2,
-    file: (req, file) => {
-      return new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, buf) => {
-          if (err) {
-            return reject(err);
-          }
-          const filename = buf.toString('hex') + path.extname(file.originalname);
-          const fileInfo = {
-            filename: filename,
-            bucketName: 'uploads'
-          };
-          resolve(fileInfo);
-        });
-      });
-    }
-  });
-  const upload = multer({ storage:storage });
-
 
 
 //middelwares
@@ -100,7 +66,7 @@ app.use(session({
     secret:"secret key",
     resave:false,
     saveUninitialized:false,
-   //cookie:{secure:true}
+    
 }))
 var mainURL = "http://localhost:3000"
 
@@ -116,15 +82,67 @@ http.listen(3000,function(){
     console.log("Server Started at "+mainURL)
     
     //my uploads 
+    app.get('/MyUploads/:id', async (req,res)=>{
+        res.render("MyUploads",{
+            "request":req,
+            "id":req.params.id
+        })
+    })
+
     app.get('/MyUploads', async (req,res)=>{
         res.render("MyUploads",{
             "request":req
         })
     })
-
     //upload files
-    app.post("/upload", upload.single('file'),(req,res)=>{
-        res.json({file:req.file})
+    app.post("/upload", upload.single('file'),async (req,res)=>{
+        if(req.session.user){
+        const id = req.body.id
+        //console.log(id)
+        try{
+            const result = await cloudinary.uploader.upload(req.file.path)
+            //console.log(result)
+            //res.json(result)
+            
+            await users.findByIdAndUpdate(id,{
+                $push:{
+                    uploads:{
+                        fileName : result.original_filename,
+                        secureURL : result.secure_url,
+                        createdAt : result.created_at 
+                    }
+                }
+            },(err,success)=>{
+                if(err){
+                    req.status = "error"
+                    req.message = "Error while uploading"
+        
+                    res.render('MyUploads',{
+                        "request":req
+                    })
+                }
+                else{
+                    req.status = "success"
+                    req.message = "Image Uploaded"
+
+                    res.render('MyUploads',{
+                        "request":req
+                    })
+                }
+            })
+            
+        }catch(err){
+            console.log(err)
+        }
+        
+        }else{
+            req.status = "error"
+            req.message = "Please Login to upload image"
+
+            res.render('MyUploads',{
+                "request":req
+            })
+        }
     })
 
     //home page
@@ -287,7 +305,7 @@ http.listen(3000,function(){
                 return false
             }
                 
-                req.status = "404"
+                req.status = "error"
                 req.message = "Password is not correct"
                 res.render('Login',{
                     "request":req

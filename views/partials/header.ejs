@@ -18,7 +18,11 @@ months = ["January","February","March","April","May","June","July","August","Sep
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" href="<%= request.mainURL %>/MyUploads">My Uploads</a>
+            <% if(request.isLogin) {%>
+              <a href="<%= request.mainURL%>/MyUploads/<%= request.session.user._id %>" class="nav-link">My Uploads</a> 
+            <%}else{%>
+              <a href="<%= request.mainURL%>/MyUploads" class="nav-link">My Uploads</a> 
+            <% } %>  
           </li>
           
           <li class="nav-item">

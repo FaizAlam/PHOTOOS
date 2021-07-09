@@ -7,6 +7,12 @@
         <div class="col-md-4">
             <h2 class="text-center display-4 my-4">Mongo File Uploads</h2>
             <form action="/upload" method="POST" enctype="multipart/form-data">
+                <% if(request.isLogin) {%>
+                    <input type="hidden" value="<%=request.session.user._id%>" name="id">
+                  <%}else{%>
+                    <input type="hidden" value="Hello" name="id">
+                <% } %>  
+                
                 <div class="input-group mb-3">
                     <input type="file" class="form-control" name="file" id="file">
                    
@@ -17,7 +23,7 @@
             </form>
 
         </div>
-
+        
        
         
     </div>
