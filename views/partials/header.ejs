@@ -16,7 +16,7 @@ months = ["January","February","March","April","May","June","July","August","Sep
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="<%= request.mainURL%> ">Home</a>
           </li>
-          
+         
           <li class="nav-item">
             <% if(request.isLogin) {%>
               <a href="<%= request.mainURL%>/MyUploads/<%= request.session.user._id %>" class="nav-link">My Uploads</a> 

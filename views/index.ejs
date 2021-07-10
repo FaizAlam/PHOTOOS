@@ -1,1 +1,34 @@
-HOME
+<div class="container">
+    <div class="grid">
+        <% if(request.isLogin) {%> 
+            <% if(request.user.uploads){%>
+                <% for (i = 0; i < request.user.uploads.length; i += 2) { %>
+                <figure class="effect-zoe">
+                    <img src="<%= request.user.uploads[i].secureURL %>" alt="img26"/>
+                    <figcaption>
+                        <h2>Creative </h2>
+                        <div class="icon-links">
+                            <a class="btn border-shadow delete" data-id='<%= request.user.uploads[i]._id  %> '>
+                                <button type="button" class="btn btn-danger">Delete</button>
+                            </a>
+                            <a href="">
+                                <button type="button" class="btn btn-primary">View</button>
+                            </a>   
+                        </div>
+                    </figcaption>	
+                </figure>
+                <% } %> 
+            <% }else{%>
+                <hr>
+                <h3>No Image Found</h3>
+            <% } %>  
+        <% }else{%>  
+            <br>
+            <h4>Login to see the uploaded files</h4>
+        <% } %> 
+    </div>
+    
+    
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

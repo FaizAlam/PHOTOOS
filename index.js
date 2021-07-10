@@ -40,7 +40,7 @@ app.set("views",__dirname+"/views")
 app.set("layout","layouts/layout")
 app.use('/public/css',express.static(__dirname+"/public/css"))
 app.use('/public/js',express.static(__dirname+"/public/js"))
-//app.use('/public/js',expre.static(__dirname+"/public/js"))
+app.use('/public/uploads',express.static(__dirname+"/public/uploads"))
 app.use(express.static('./public'))
 app.use(expressLayouts)
 app.use(bodyParser.urlencoded())
@@ -83,21 +83,28 @@ http.listen(3000,function(){
     
     //my uploads 
     app.get('/MyUploads/:id', async (req,res)=>{
+        const data = await users.findById(req.params.id)
         res.render("MyUploads",{
             "request":req,
-            "id":req.params.id
+            "id":req.params.id,
+            "data" : data
         })
+        //console.log(data)
     })
 
     app.get('/MyUploads', async (req,res)=>{
+    
         res.render("MyUploads",{
             "request":req
+            
         })
     })
     //upload files
     app.post("/upload", upload.single('file'),async (req,res)=>{
-        if(req.session.user){
         const id = req.body.id
+        const data = await users.findById(id)
+        if(req.session.user){
+
         //console.log(id)
         try{
             const result = await cloudinary.uploader.upload(req.file.path)
@@ -126,7 +133,7 @@ http.listen(3000,function(){
                     req.message = "Image Uploaded"
 
                     res.render('MyUploads',{
-                        "request":req
+                      "request"  :req
                     })
                 }
             })
@@ -148,8 +155,10 @@ http.listen(3000,function(){
     //home page
     app.get('/',(req,res)=>{
         res.render('index',{
-            'request':req
+            'request':req,
+
         })
+        //console.log(req)
     })
 
     //register page
