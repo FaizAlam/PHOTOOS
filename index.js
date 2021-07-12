@@ -21,6 +21,7 @@ const crypto = require('crypto')
 const path = require('path')
 const cloudinary = require('./utils/cloudinary')
 const upload = require('./utils/multer')
+const user = require('./model/user')
 
 
 const http = httpObj.createServer(app)
@@ -44,7 +45,7 @@ app.use('/public/uploads',express.static(__dirname+"/public/uploads"))
 app.use(express.static('./public'))
 app.use(expressLayouts)
 app.use(bodyParser.urlencoded())
-//app.use(methodOverride('_method'))
+app.use(methodOverride('_method'))
 //app.use(formidable())
 
 //Setup nodemailer
@@ -108,15 +109,16 @@ http.listen(3000,function(){
         //console.log(id)
         try{
             const result = await cloudinary.uploader.upload(req.file.path)
-            //console.log(result)
+            console.log(result)
             //res.json(result)
             
             await users.findByIdAndUpdate(id,{
-                $push:{
+                $addToSet:{
                     uploads:{
                         fileName : result.original_filename,
                         secureURL : result.secure_url,
-                        createdAt : result.created_at 
+                        createdAt : result.created_at,
+                        cloudinary_id : result.public_id 
                     }
                 }
             },(err,success)=>{
@@ -150,6 +152,52 @@ http.listen(3000,function(){
                 "request":req
             })
         }
+    })
+    
+    app.delete('/uploads/delete/:id',async (req,res)=>{
+        if(req.session.user){
+            const user = req.session.user
+            //console.log(user.uploads)
+            const data = user.uploads
+            
+            //const data = users.findOne({"uploads._id":req.params.id})
+            //delete image from cloudinary
+            //console.log(data)
+            for(var i = 0;i<data.length;i+=2){
+              //  console.log(data[i]['cloudinary_id'])
+               // console.log(req.params.id)
+                if(data[i]['cloudinary_id'] == req.params.id){
+                    console.log("Matched")
+                    //delete image from cloudinary
+                    await cloudinary.uploader.destroy(data[i]['cloudinary_id'], function(result) { console.log(result) })
+                    
+                    //users.find({'uploads.cloudinary_id':data[i]//['cloudinary_id']}, function(err, foundUser){
+                    // });
+                    
+
+                    
+                }
+            }
+            
+            //delete image from db
+            //console.log("Deleted from database")
+
+        }else{
+            req.status ="error"
+            req.message ="Login to delete"
+            res.render('index',{
+                "request":req
+            })
+        }
+        //find user by id 
+        //id = req.params.id
+        //console.log(id)
+        //const data = await users.findById(req.params.id)
+        //console.log(user.uploads.cloudinary_id)
+        
+            
+
+        
     })
 
     //home page

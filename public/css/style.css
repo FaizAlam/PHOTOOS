@@ -3,9 +3,13 @@
 	position: relative;
 	margin: 0 auto;
 	padding: 1em 0 4em;
-	max-width: 1000px;
+	/*max-width: 1000px;*/
 	list-style: none;
 	text-align: center;
+	display: grid;
+    align-content: center;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 /* Common style */
@@ -21,6 +25,9 @@
 	background: #f3f3f3;
 	text-align: center;
 	cursor: pointer;
+	display: flex;
+    align-content: center;
+    justify-content: center;
 }
 
 .grid figure img {
@@ -38,8 +45,10 @@
 	font-size: 1.25em;
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
-	display: grid;
+	display: flex;
     grid-template-columns: 1fr 1fr;
+	align-content: center;
+    justify-content: center;
 
 }
 
@@ -101,6 +110,7 @@ figure.effect-zoe h2 {
 div.icon-links{
 	display: flex;
     gap: 20px;
+	align-items: center;
 }
 
 figure.effect-zoe div.icon-links a {
@@ -137,6 +147,7 @@ figure.effect-zoe:hover h2,
 figure.effect-zoe:hover div.icon-links a {
 	-webkit-transform: translate3d(0,0,0);
 	transform: translate3d(0,0,0);
+	line-height: 1;
 
 }
 

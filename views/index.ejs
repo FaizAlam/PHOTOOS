@@ -1,19 +1,29 @@
-<div class="container">
+
+<div class="container" style="margin-top: 50px;">
+    <%- include('./partials/ResponseAlert',{
+        "request":request
+    }) %> 
     <div class="grid">
         <% if(request.isLogin) {%> 
             <% if(request.user.uploads){%>
                 <% for (i = 0; i < request.user.uploads.length; i += 2) { %>
                 <figure class="effect-zoe">
+                    <a href="#" class="pop">
                     <img src="<%= request.user.uploads[i].secureURL %>" alt="img26"/>
+                    </a>
                     <figcaption>
-                        <h2>Creative </h2>
+                        
                         <div class="icon-links">
-                            <a class="btn border-shadow delete" data-id='<%= request.user.uploads[i]._id  %> '>
-                                <button type="button" class="btn btn-danger">Delete</button>
-                            </a>
-                            <a href="">
-                                <button type="button" class="btn btn-primary">View</button>
-                            </a>   
+
+                            <form method="POST" action="uploads/delete/<%= request.user.uploads[i].cloudinary_id%>?_method=DELETE">
+                                <button  class="btn btn-danger">Delete</button>
+                                
+                            </form>
+                            <input type="text" value="<%= request.user.uploads[i].secureURL%>" id="x1" style="display:none">                    
+                            <button type="button" class="btn btn-info" id="share_btn" 
+                            onclick="copylink('x1')"
+                            >Share</button>
+                             
                         </div>
                     </figcaption>	
                 </figure>
@@ -31,4 +41,40 @@
     
 </div>
 
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content"> 
+        <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>             
+        <div class="modal-body">
+          <img src="" class="imagepreview" style="width: 100%;" >
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    function copylink(containerid) {   
+        var copyDiv = document.getElementById(containerid);
+        copyDiv.style.display = 'block';
+        copyDiv.focus();
+        document.execCommand('SelectAll');
+        document.execCommand("Copy", false, null);
+        copyDiv.style.display = 'none';
+        console.log("Text value copied to clipboard from ID: ", copyDiv.value);
+        
+    }
+
+</script>
+<script>
+    $(function() {
+		$('.pop').on('click', function() {
+			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+			$('#imagemodal').modal('show');   
+		});		
+});
+</script>

@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema({
     uploads :[{
         fileName :{type:String},
         secureURL : {type:String},
-        createdAt : {type:Date}
+        createdAt : {type:Date},
+        cloudinary_id : {type:String}
     }]
     
 })
