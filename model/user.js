@@ -32,7 +32,8 @@ const userSchema = new mongoose.Schema({
         fileName :{type:String},
         secureURL : {type:String},
         createdAt : {type:Date},
-        cloudinary_id : {type:String}
+        cloudinary_id : {type:String},
+        isFav : {type:Boolean, default: false}
     }]
     
 })

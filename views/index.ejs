@@ -14,8 +14,8 @@
                     <figcaption>
                         
                         <div class="icon-links">
-
-                            <form method="POST" action="uploads/delete/<%= request.user.uploads[i].cloudinary_id%>?_method=DELETE">
+                            
+                            <form method="POST" action="uploads/delete/<%= request.user.uploads[i].cloudinary_id%>/<%= request.user._id%>?_method=DELETE">
                                 <button  class="btn btn-danger">Delete</button>
                                 
                             </form>

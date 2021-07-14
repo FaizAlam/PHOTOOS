@@ -153,53 +153,58 @@ http.listen(3000,function(){
             })
         }
     })
+    //delete images
+    //incomplete feature
+    app.delete('/uploads/delete/:upload_id/:user_id',async (req,res)=>{
+       
+           upload_id = req.params.upload_id
+           user_id = req.params.user_id
+           //console.log(upload_id,user_id)
     
-    app.delete('/uploads/delete/:id',async (req,res)=>{
-        if(req.session.user){
-            const user = req.session.user
-            //console.log(user.uploads)
-            const data = user.uploads
-            
-            //const data = users.findOne({"uploads._id":req.params.id})
-            //delete image from cloudinary
-            //console.log(data)
-            for(var i = 0;i<data.length;i+=2){
-              //  console.log(data[i]['cloudinary_id'])
-               // console.log(req.params.id)
-                if(data[i]['cloudinary_id'] == req.params.id){
-                    console.log("Matched")
-                    //delete image from cloudinary
-                    await cloudinary.uploader.destroy(data[i]['cloudinary_id'], function(result) { console.log(result) })
-                    
-                    //users.find({'uploads.cloudinary_id':data[i]//['cloudinary_id']}, function(err, foundUser){
-                    // });
-                    
+           
+            const user = await users.findById(user_id)
+            if(user){
+                users.findOneAndUpdate(
+                    {},
+                    {$pull: {uploads: {cloudinary_id:upload_id}}},
+                    {new:true},
+                    (err,result)=>{
+                        if(err){
+                            req.status="Error"
+                            req.message = "Cannot deletedd"
+                            console.log(err)
+                            res.render('index',{
+                                "request":req
+                            })
+                        }
+                        else{
+                            console.log("Deleted")
+                            req.status="success"
+                            req.message="File Deleted"
+                            res.render('index',{
+                                "request":req
+                            })   
+                        }
+                     }
+                )               
+            }   
+            else{
+               req.status="Error"
+               req.message = "User not found"
+               res.render('index',{
+                   "request":req
+               })
+           }
+           
 
-                    
-                }
-            }
-            
-            //delete image from db
-            //console.log("Deleted from database")
 
-        }else{
-            req.status ="error"
-            req.message ="Login to delete"
-            res.render('index',{
-                "request":req
-            })
-        }
-        //find user by id 
-        //id = req.params.id
-        //console.log(id)
-        //const data = await users.findById(req.params.id)
-        //console.log(user.uploads.cloudinary_id)
         
-            
 
         
     })
 
+    //bookmark GET
+    app.get('/')
     //home page
     app.get('/',(req,res)=>{
         res.render('index',{
