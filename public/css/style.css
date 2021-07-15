@@ -194,3 +194,40 @@ opacity:1;
 min-height:200px;
 
 }
+
+
+
+
+    .heart {
+        width: 100px;
+        height: 100px;
+        background: url("https://cssanimation.rocks/images/posts/steps/heart.png") no-repeat;
+        background-position: 0 0;
+        cursor: pointer;
+        transition: background-position 1s steps(28);
+        transition-duration: 0s;
+      }
+      .heart.is-active {
+        transition-duration: 1s;
+        background-position: -2800px 0;
+      }
+      .red{
+        color: #e80f41;
+      }
+      .top{
+        position: absolute;
+        height: 51px;
+        width: 100%;
+        background: linear-gradient(179deg, #616161bf, #2121217d);
+        display: flex;
+        /* align-content: flex-end; */
+        /* align-items: inherit; */
+        justify-content: flex-end;
+        padding: 2px;
+        display: none;
+        transform: translate3d(0,-100%,0);
+        transition: transform 0.35s;;
+      }
+      figure.effect-zoe:hover .top{
+          transform: translate3d(0,0,0);
+      }

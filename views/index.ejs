@@ -3,6 +3,7 @@
     <%- include('./partials/ResponseAlert',{
         "request":request
     }) %> 
+
     <div class="grid">
         <% if(request.isLogin) {%> 
             <% if(request.user.uploads){%>
@@ -11,19 +12,42 @@
                     <a href="#" class="pop">
                     <img src="<%= request.user.uploads[i].secureURL %>" alt="img26"/>
                     </a>
+                    <% if(request.user.uploads[i].isFav){%> 
+                    <div class="top">
+                        <button class="btn" style="border:None"><i class="fa fa-heart fa-2x red"></i></button>
+                        
+                    </div>
+                    <% } %> 
                     <figcaption>
                         
                         <div class="icon-links">
-                            
+                            <!--DELETEE-->
                             <form method="POST" action="uploads/delete/<%= request.user.uploads[i].cloudinary_id%>/<%= request.user._id%>?_method=DELETE">
-                                <button  class="btn btn-danger">Delete</button>
+                                <button class="btn" style="border:None"><i class="fa fa-trash fa-2x"></i></button>
                                 
                             </form>
-                            <input type="text" value="<%= request.user.uploads[i].secureURL%>" id="x1" style="display:none">                    
-                            <button type="button" class="btn btn-info" id="share_btn" 
-                            onclick="copylink('x1')"
-                            >Share</button>
-                             
+                            
+                            <!--SHARE-->
+                            <input type="text" value="<%= request.user.uploads[i].secureURL%>" id="<%= request.user.uploads[i]._id %>" style="display:none">   
+
+                            <button class="btn trigger" style="border:None" onclick="copylink('<%= request.user.uploads[i]._id %>')" data-toggle="tooltip" title="Copy Link!"><i class="fa fa-share-alt fa-2x"></i></button>
+                            
+
+                            <!--DOWNLOAD-->
+                            <a href="<%= request.user.uploads[i].secureURL%>" target="_blank">
+                                <button class="btn" style="border:None"><i class="fa fa-cloud-download fa-2x"></i></button>
+                            </a>
+                            
+                            <!--FAVOURITE-->
+                            <form method="POST" action="uploads/favourite/<%= request.user.uploads[i].cloudinary_id%>">
+                                <% if(!request.user.uploads[i].isFav){%> 
+                                <button class="btn" style="border:None"><i class="fa fa-heart fa-2x"></i></button>
+                                <% }else{%>
+                                <button class="btn" style="border:None"><i class="fa fa-heart fa-2x red"></i></button>
+                                <% } %> 
+                            </form>
+                            
+                            
                         </div>
                     </figcaption>	
                 </figure>
@@ -77,4 +101,12 @@
 			$('#imagemodal').modal('show');   
 		});		
 });
+
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+  });
+
+
+
 </script>

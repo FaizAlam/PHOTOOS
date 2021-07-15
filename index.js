@@ -201,13 +201,58 @@ http.listen(3000,function(){
 
         
     })
-
+    
     //bookmark GET
     app.get('/Favourites',async (req,res)=>{
         res.render('Favourites',{
             "request":req
         })
     })
+    //favourite a photo
+    app.post('/uploads/favourite/:upload_id',async (req,res)=>{
+        //res.send(req.params.upload_id)
+        id = req.params.upload_id
+        await users.findOneAndUpdate(
+            {"uploads.cloudinary_id":id},
+            {$set:{"uploads.$.isFav" : true}},
+            {new:true},
+            async (err,result)=>{
+                if(err){
+                    res.send("Error")
+                }
+                else{
+                    res.render('index',{
+                        "request":req
+                    })
+                }
+            }
+        )
+
+    })
+
+
+    //undo favourite
+    app.post('/uploads/undo-favourite/:upload_id',async (req,res)=>{
+        //res.send(req.params.upload_id)
+        id = req.params.upload_id
+        await users.findOneAndUpdate(
+            {"uploads.cloudinary_id":id},
+            {$set:{"uploads.$.isFav" : false}},
+            {new:true},
+            async (err,result)=>{
+                if(err){
+                    res.send("Error")
+                }
+                else{
+                    res.render('Favourites',{
+                        "request":req
+                    })
+                }
+            }
+        )
+
+    })
+
     //home page
     app.get('/',(req,res)=>{
         res.render('index',{
