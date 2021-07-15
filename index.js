@@ -69,7 +69,7 @@ app.use(session({
     saveUninitialized:false,
     
 }))
-var mainURL = "http://localhost:3000"
+var mainURL = "https://photoos.herokuapp.com"
 
 app.use(function(req,res,next){
     req.mainURL = mainURL
