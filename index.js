@@ -78,8 +78,9 @@ app.use(function(req,res,next){
 
     next()
 })
+var server_port = process.env.YOUR_PORT || process.env.PORT || 80;
 
-http.listen(3000,function(){
+http.listen(server_port,function(){
     console.log("Server Started at "+mainURL)
     
     //my uploads 
@@ -92,7 +93,7 @@ http.listen(3000,function(){
         })
         //console.log(data)
     })
-
+    
     app.get('/MyUploads', async (req,res)=>{
     
         res.render("MyUploads",{
