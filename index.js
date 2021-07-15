@@ -109,7 +109,7 @@ http.listen(3000,function(){
         //console.log(id)
         try{
             const result = await cloudinary.uploader.upload(req.file.path)
-            console.log(result)
+            //console.log(result)
             //res.json(result)
             
             await users.findByIdAndUpdate(id,{
@@ -154,7 +154,7 @@ http.listen(3000,function(){
         }
     })
     //delete images
-    //incomplete feature
+    //complete feature
     app.delete('/uploads/delete/:upload_id/:user_id',async (req,res)=>{
        
            upload_id = req.params.upload_id
@@ -168,7 +168,7 @@ http.listen(3000,function(){
                     {},
                     {$pull: {uploads: {cloudinary_id:upload_id}}},
                     {new:true},
-                    (err,result)=>{
+                    async (err,result)=>{
                         if(err){
                             req.status="Error"
                             req.message = "Cannot deletedd"
@@ -181,9 +181,8 @@ http.listen(3000,function(){
                             console.log("Deleted")
                             req.status="success"
                             req.message="File Deleted"
-                            res.render('index',{
-                                "request":req
-                            })   
+                            await cloudinary.uploader.destroy(upload_id)
+                            res.redirect('/')   
                         }
                      }
                 )               
@@ -204,11 +203,15 @@ http.listen(3000,function(){
     })
 
     //bookmark GET
-    app.get('/')
+    app.get('/Favourites',async (req,res)=>{
+        res.render('Favourites',{
+            "request":req
+        })
+    })
     //home page
     app.get('/',(req,res)=>{
         res.render('index',{
-            'request':req,
+            'request':req
 
         })
         //console.log(req)

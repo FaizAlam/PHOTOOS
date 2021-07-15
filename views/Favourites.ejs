@@ -7,26 +7,24 @@
         <% if(request.isLogin) {%> 
             <% if(request.user.uploads){%>
                 <% for (i = 0; i < request.user.uploads.length; i += 1) { %>
-                <figure class="effect-zoe">
-                    <a href="#" class="pop">
-                    <img src="<%= request.user.uploads[i].secureURL %>" alt="img26"/>
-                    </a>
-                    <figcaption>
-                        
-                        <div class="icon-links">
-                            
-                            <form method="POST" action="uploads/delete/<%= request.user.uploads[i].cloudinary_id%>/<%= request.user._id%>?_method=DELETE">
-                                <button  class="btn btn-danger">Delete</button>
-                                
-                            </form>
-                            <input type="text" value="<%= request.user.uploads[i].secureURL%>" id="x1" style="display:none">                    
-                            <button type="button" class="btn btn-info" id="share_btn" 
-                            onclick="copylink('x1')"
-                            >Share</button>
-                             
-                        </div>
-                    </figcaption>	
-                </figure>
+                    <% if(request.user.uploads[i].isFav==false){%> 
+                        <figure class="effect-zoe">
+                        <a href="#" class="pop">
+                        <img src="<%= request.user.uploads[i].secureURL %>" alt="img26"/>
+                        </a>
+                        <figcaption>
+                            <div class="icon-links">
+                                <form method="POST" action="uploads/delete/<%= request.user.uploads[i].cloudinary_id%>/<%= request.user._id%>?_method=DELETE">
+                                <button  class="btn btn-danger">Delete</button> 
+                                </form>
+                                <input type="text" value="<%= request.user.uploads[i].secureURL%>" id="x1" style="display:none">                    
+                                <button type="button" class="btn btn-info" id="share_btn" 
+                                onclick="copylink('x1')"
+                                >Share</button>       
+                            </div>
+                        </figcaption>	
+                        </figure>
+                     <% } %> 
                 <% } %> 
             <% }else{%>
                 <hr>
@@ -68,13 +66,3 @@
         console.log("Text value copied to clipboard from ID: ", copyDiv.value);
         
     }
-
-</script>
-<script>
-    $(function() {
-		$('.pop').on('click', function() {
-			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
-			$('#imagemodal').modal('show');   
-		});		
-});
-</script>
