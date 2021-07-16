@@ -5,19 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHOTOOS</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet" />
     <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/public/js/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/customize.css">
+    <style>
+        body{
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(#fff,#f5f3f3);
+        }
+    </style>
+
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="flex flex-col min-h-screen">
     <%- include('../partials/header.ejs')  %> 
     <%-body  %> 
     
+
     <%- include('../partials/footer.ejs')  %> 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    function copylink(containerid) {   
+        var copyDiv = document.getElementById(containerid);
+        copyDiv.style.display = 'block';
+        copyDiv.focus();
+        document.execCommand('SelectAll');
+        document.execCommand("Copy", false, null);
+        copyDiv.style.display = 'none';
+        console.log("Text value copied to clipboard from ID: ", copyDiv.value);
+        
+    }
+
+</script>
+<script>
+    $(function() {
+		$('.pop').on('click', function() {
+			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+			$('#imagemodal').modal('show');   
+		});		
+});
+
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+  });
+
+
+
+</script>
+
 </body>
 </html>

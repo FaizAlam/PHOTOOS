@@ -69,7 +69,7 @@ app.use(session({
     saveUninitialized:false,
     
 }))
-var mainURL = "https://photoos.herokuapp.com"
+var mainURL = "http://localhost"
 
 app.use(function(req,res,next){
     req.mainURL = mainURL
@@ -78,7 +78,7 @@ app.use(function(req,res,next){
 
     next()
 })
-var server_port = process.env.YOUR_PORT || process.env.PORT || 80;
+var server_port = process.env.YOUR_PORT || process.env.PORT || 80 ||3000;
 
 http.listen(server_port,function(){
     console.log("Server Started at "+mainURL)
