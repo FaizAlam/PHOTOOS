@@ -106,7 +106,7 @@ http.listen(server_port,function(){
         const id = req.body.id
         const data = await users.findById(id)
         if(req.session.user){
-
+            
         //console.log(id)
         try{
             const result = await cloudinary.uploader.upload(req.file.path)
@@ -231,7 +231,59 @@ http.listen(server_port,function(){
 
     })
 
+    //Get user profile
+    // Incomplete
+    app.get('/profile', async(req,res)=>{
+        if(req.session.user){
+            res.render('Profile',{
+                "request":req
+            })
+        }else{
+            //Create a new 404 error page which can be used for every error across platform
+            //using req.message we can send different messages to that page while template remains same
+        }
+    })
 
+    app.post('/upload_avatar',upload.single('avatar'),async (req,res)=>{
+       // const id = req.body.id
+        if(req.session.user){
+            try{
+                const gravatar = await cloudinary.uploader.upload(req.file.path)
+                //console.log(gravatar)
+                id = mongoose.Types.ObjectId(req.session.user._id)
+                await users.findByIdAndUpdate(
+                    id,
+                    {"avatar":gravatar.secure_url,"avatar_id":gravatar.public_id},
+                    (err,save)=>{
+                      if(err){
+                          req.status = "error"
+                          req.message = "avatar upload failed"
+                          res.render('Profile',{
+                              "request":req
+                          })
+                      }
+                      else{
+                          req.status = "success"
+                          req.message = "avatar uploaded"
+                          res.render('Profile',{
+                              "request":req
+                          })
+                      }  
+                    }
+                )
+
+            }catch(err){
+                console.log(err)
+            }
+        }
+        else{
+            req.status = "error"
+            req.message = "Please Login first"
+            res.render('Profile',{
+                "request":req
+            })
+        }
+    })
     //undo favourite
     app.post('/uploads/undo-favourite/:upload_id',async (req,res)=>{
         //res.send(req.params.upload_id)

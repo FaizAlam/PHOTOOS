@@ -12,6 +12,12 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    avatar:{
+        type:String
+    },
+    avatar_id:{
+        type:String
+    },
     password :{
         type:String,
         required:true
