@@ -181,7 +181,24 @@ figure.effect-zoe:hover h2 {
 	transition-delay: 0.05s;
 }
 
+.fa-trash:hover{
+	color: #ff0377;
+	transition: 0.2s ease-in-out;
+}
+.fa-share-alt:hover{
+	color: #009198;
+	transition: 0.2s ease-in-out;
+}
 
+.fa-cloud-download:hover{
+    color: #0464a9;
+	transition: 0.2s ease-in-out;
+}
+
+.fa-heart:hover{
+    color: #e80f41;
+	transition: 0.2s ease-in-out;
+}
 
 
 /*Modal */

@@ -93,10 +93,10 @@ http.listen(server_port,function(){
         })
         //console.log(data)
     })
-    
+    //my uploads without id
     app.get('/MyUploads', async (req,res)=>{
     
-        res.render("MyUploads",{
+        res.render("error",{
             "request":req
             
         })
@@ -154,6 +154,14 @@ http.listen(server_port,function(){
             })
         }
     })
+
+    //error page
+    app.get('/error',(req,res)=>{
+        res.render('error',{
+            "request":req
+        })
+    })
+
     //delete images
     //complete feature
     app.delete('/uploads/delete/:upload_id/:user_id',async (req,res)=>{
