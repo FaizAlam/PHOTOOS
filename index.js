@@ -95,7 +95,7 @@ http.listen(server_port,function(){
     })
     //my uploads without id
     app.get('/MyUploads', async (req,res)=>{
-    
+        
         res.render("error",{
             "request":req
             
@@ -149,8 +149,9 @@ http.listen(server_port,function(){
             req.status = "error"
             req.message = "Please Login to upload image"
 
-            res.render('MyUploads',{
+            res.render("error",{
                 "request":req
+                
             })
         }
     })
