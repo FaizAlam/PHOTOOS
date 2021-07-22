@@ -200,9 +200,10 @@ http.listen(server_port,function(){
             else{
                req.status="Error"
                req.message = "User not found"
-               res.render('index',{
-                   "request":req
-               })
+               res.render("error",{
+                "request":req
+                
+            })
            }
            
 
