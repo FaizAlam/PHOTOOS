@@ -69,8 +69,9 @@ app.use(session({
     saveUninitialized:false,
     
 }))
-var mainURL = "http://localhost"
-
+var mainURL = "https://photoos.herokuapp.com"
+//for localhost http://localhost
+//for hereoku https://photoos.herokuapp.com
 app.use(function(req,res,next){
     req.mainURL = mainURL
     req.isLogin = (typeof req.session.user !== "undefined")
