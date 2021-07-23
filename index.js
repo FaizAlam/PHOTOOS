@@ -87,6 +87,16 @@ http.listen(server_port,function(){
     //my uploads 
     app.get('/MyUploads/:id', async (req,res)=>{
         const data = await users.findById(req.params.id)
+                    .then((data)=>{
+                        console.log("User Found")
+                        })
+                    .catch((err)=>{
+                        req.status = "error"
+                        req.message = err
+                        res.render('MyUploads',{
+                        "request":req
+                        })
+                    })
         res.render("MyUploads",{
             "request":req,
             "id":req.params.id,
@@ -346,6 +356,16 @@ http.listen(server_port,function(){
         
 
         var already_user = await users.findOne({"email":email})
+                           .then((data)=>{
+                               console.log("User Found")
+                            })
+                            .catch((err)=>{
+                                req.status = "error"
+                                req.message = err
+                                res.render('Register',{
+                                "request":req
+                                })
+                            })
         console.log(already_user)
         if(already_user == null){
             bcrypt.hash(password,10,async (err,hash)=>{
@@ -453,6 +473,16 @@ http.listen(server_port,function(){
         const password = req.body.password
         
         const user = await users.findOne({"email":email})
+                    .then((data)=>{
+                        console.log("User Found")
+                        })
+                    .catch((err)=>{
+                        req.status = "error"
+                        req.message = err
+                        res.render('Login',{
+                        "request":req
+                        })
+                    })
         //console.log(email)
         //console.log(user)
         if(user == null){
@@ -602,7 +632,7 @@ http.listen(server_port,function(){
                 "reset_token":parseInt(reset_token)
             }]
         })
-
+        
         if(user == null){
             req.status = "error";
             req.message = "Email does not exit or recovery link is expired"
