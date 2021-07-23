@@ -356,16 +356,6 @@ http.listen(server_port,function(){
         
 
         var already_user = await users.findOne({"email":email})
-                           .then((data)=>{
-                               console.log("User Found")
-                            })
-                            .catch((err)=>{
-                                req.status = "error"
-                                req.message = err
-                                res.render('Register',{
-                                "request":req
-                                })
-                            })
         console.log(already_user)
         if(already_user == null){
             bcrypt.hash(password,10,async (err,hash)=>{
@@ -473,16 +463,6 @@ http.listen(server_port,function(){
         const password = req.body.password
         
         const user = await users.findOne({"email":email})
-                    .then((data)=>{
-                        console.log("User Found")
-                        })
-                    .catch((err)=>{
-                        req.status = "error"
-                        req.message = err
-                        res.render('Login',{
-                        "request":req
-                        })
-                    })
         //console.log(email)
         //console.log(user)
         if(user == null){
