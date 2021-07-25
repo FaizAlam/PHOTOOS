@@ -12,6 +12,7 @@ const session = require('express-session')
 const httpObj = require('http')
 //const formidable = require('express-formidable')
 const bcrypt = require('bcrypt')
+const google = require('googleapis')
 const nodemailer = require('nodemailer')
 const users = require('./model/user')
 //const multer = require('multer')
@@ -48,19 +49,33 @@ app.use(bodyParser.urlencoded())
 app.use(methodOverride('_method'))
 //app.use(formidable())
 
+//SETUP MAIL OAUTH
+CLIENT_ID = process.env.CLIENT_ID
+CLIENT_SECRET = process.env.CLIENT_SECRET
+REDIRECT_URI = process.env.REDIRECT_URI
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID,CLIENT_SECRET,REDIRECT_URI)
+oAuth2Client.setCredentials({refresh_token:process.env.REFRESH_TOKEN})
+
+
 //Setup nodemailer
 
 const nodemailerFrom = process.env.EMAIL
-const nodemailerObject = {
-    service:"gmail",
-    host:"smtp.gmail.com",
-    port:465,
-    secure:true,
-    auth:{
-        user:process.env.MAIL,
-        pass: process.env.PASS
-    }
-}
+//const accessToken = await oAuth2Client
+//const nodemailerObject = {
+//    service:"gmail",
+//    host:"smtp.gmail.com",
+//    port:465,
+//    secure:true,
+//    auth:{
+//        type:'OAuth2',
+//        user:'loggskey1@gmail.com',
+//        clientId : CLIENT_ID,
+//        clientSecret : CLIENT_SECRET,
+//        refreshToken : REFRESH_TOKEN,
+//        accessToken : accessToken
+//
+//    }
+//}
 
 //SESSIONS
 app.use(session({
@@ -368,9 +383,24 @@ http.listen(server_port,function(){
                     "sharedWithMe":[],
                     "isVerified":isVerified,
                     "verification_token":verification_token
-
+                    
                 }, async (err,data)=>{
-                    var transporter = nodemailer.createTransport(nodemailerObject);
+                    const accessToken = await oAuth2Client.getAccessToken()
+                    var transporter = nodemailer.createTransport({
+                        service:"gmail",
+                        host:"smtp.gmail.com",
+                        port:465,
+                        secure:true,
+                        auth:{
+                            type:'OAuth2',
+                            user:'loggskey1@gmail.com',
+                            clientId : CLIENT_ID,
+                            clientSecret : CLIENT_SECRET,
+                            refreshToken : REFRESH_TOKEN,
+                            accessToken : accessToken
+                    
+                        }
+                    });
 
                     var text = "Please verify your account by clicking the following link "+ mainURL + "/verifyEmail/" +email+"/"+verification_token;
 
@@ -378,7 +408,7 @@ http.listen(server_port,function(){
                     var html = "Please verify your account by clicking the following link :<br><br><a href= '+ mainURL +email+"/"+verification_token'>Confirm Email</a> ";
 
                     await transporter.sendMail({
-                        from:nodemailerFrom,
+                        from:'Photoos <loggskey1@gmail.com>',
                         to:email,
                         subject:"Email Verification",
                         text:text,
@@ -555,7 +585,7 @@ http.listen(server_port,function(){
         })
 
     })
-
+    
     //Reset Password page
     app.get("/ResetPassword/:email/:reset_token",async (req,res)=>{
         const email = req.params.email
