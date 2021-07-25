@@ -12,7 +12,7 @@ const session = require('express-session')
 const httpObj = require('http')
 //const formidable = require('express-formidable')
 const bcrypt = require('bcrypt')
-const google = require('googleapis')
+const {google} = require('googleapis')
 const nodemailer = require('nodemailer')
 const users = require('./model/user')
 //const multer = require('multer')
@@ -53,6 +53,7 @@ app.use(methodOverride('_method'))
 CLIENT_ID = process.env.CLIENT_ID
 CLIENT_SECRET = process.env.CLIENT_SECRET
 REDIRECT_URI = process.env.REDIRECT_URI
+REFRESH_TOKEN = process.env.REFRESH_TOKEN
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID,CLIENT_SECRET,REDIRECT_URI)
 oAuth2Client.setCredentials({refresh_token:process.env.REFRESH_TOKEN})
 
@@ -84,8 +85,8 @@ app.use(session({
     saveUninitialized:false,
     
 }))
-var mainURL = "https://photoos.herokuapp.com"
-//for localhost http://localhost
+var mainURL = "http://localhost"
+//for localhost 
 //for hereoku https://photoos.herokuapp.com
 app.use(function(req,res,next){
     req.mainURL = mainURL
