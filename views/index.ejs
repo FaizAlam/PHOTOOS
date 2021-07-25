@@ -7,7 +7,7 @@
     
         <% if(request.isLogin) {%> 
             <div class="grid">
-            <% if(request.user.uploads){%>
+            <% if(request.user.uploads!= ''){%>
                 <% for (i = 0; i < request.user.uploads.length; i += 1) { %>
                 <figure class="effect-zoe">
                     <a href="#" class="pop">
