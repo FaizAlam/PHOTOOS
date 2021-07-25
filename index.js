@@ -422,7 +422,7 @@ http.listen(server_port,function(){
                         }
                     })
                     req.status = "success";
-                    req.message ="Signned up successfully";
+                    req.message ="Verify your account(Check spam folder too)";
                     res.render('Register',{
                         "request":req
                     })
