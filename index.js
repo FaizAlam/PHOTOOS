@@ -561,7 +561,22 @@ http.listen(server_port,function(){
             }
         })
 
-        const transporter = nodemailer.createTransport(nodemailerObject)
+        const accessToken = await oAuth2Client.getAccessToken()
+        var transporter = nodemailer.createTransport({
+            service:"gmail",
+            host:"smtp.gmail.com",
+            port:465,
+            secure:true,
+            auth:{
+                type:'OAuth2',
+                user:'loggskey1@gmail.com',
+                clientId : CLIENT_ID,
+                clientSecret : CLIENT_SECRET,
+                refreshToken : REFRESH_TOKEN,
+                accessToken : accessToken
+        
+            }
+        });
         const text = "Please click the following link to reset your password: "+mainURL+"/ResetPassword/"+email+"/"+reset_token;
         
 

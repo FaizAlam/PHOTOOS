@@ -103,20 +103,66 @@
 
       </div>
     </div>
-  
+    
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="sm:hidden" id="mobile-menu">
       <div class="px-2 pt-2 pb-3 space-y-1">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <a href="#" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Home</a>
+        <a href="<%= request.mainURL%>" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Home</a>
   
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Upload</a>
+        <% if(request.isLogin) {%>
+          <a href="<%= request.mainURL%>/MyUploads/<%= request.session.user._id %>" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Upload</a>
+        <%}else{%>
+          <a href="<%= request.mainURL%>/MyUploads" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Upload</a>
+        <% } %>  
+        
+        <a href="<%= request.mainURL%>/Favourites" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Favourite</a>
   
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Favourite</a>
-  
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Login</a>
-
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Register</a>
+        <% if(request.isLogin){%>
+          <div class="ml-3 relative">
+            <button
+                  class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out"
+                  id="user-menu" aria-label="User menu" aria-haspopup="true">
+                <% if(request.session.user.avatar){%> 
+                  <img class="h-8 w-8 rounded-full" src="<%= request.session.user.avatar  %>"
+                       alt="profileee imagee"/>
+                <% }else{%> 
+                  <img class="h-8 w-8 rounded-full" src="/public/uploads/icons/user.png"
+                       alt="profileee imagee"/>
+                <% } %> 
+            </button>
+            <div id="user-menu-dropdown" class="menu-hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg z-10">
+              <div
+                class="py-1 rounded-md bg-white shadow-xs"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="user-menu"
+              >
+                <a
+                  href="<%= request.mainURL%>/Profile"
+                  class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                  role="menuitem"
+                >Your Profile</a>
+                <a
+                  href="<%= request.mainURL%>/Settings"
+                  class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                  role="menuitem"
+                >Settings</a>
+                <a
+                  href="<%= request.mainURL%>/Logout"
+                  class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                  role="menuitem"
+                >Sign out</a>
+              </div>
+            </div>
+          </div>
+          
+          
+        <% }else{ %> 
+          <a href="<%= request.mainURL%>/Login" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>
+        
+          <a href="<%= request.mainURL%>/Register" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>   
+        <% } %> 
       </div>
     </div>
   </nav>

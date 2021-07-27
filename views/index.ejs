@@ -8,7 +8,7 @@
         <% if(request.isLogin) {%> 
             <div class="grid">
             <% if(request.user.uploads!= ''){%>
-                <% for (i = 0; i < request.user.uploads.length; i += 1) { %>
+                <% for (i = request.user.uploads.length-1; i>=0; i -=1) { %>
                 <figure class="effect-zoe">
                     <a href="#" class="pop">
                     <img src="<%= request.user.uploads[i].secureURL %>" alt="img26" class="shadow-lg rounded max-w-full h-auto align-middle border-none"/>
