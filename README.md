@@ -3,17 +3,18 @@ Photoos is an image storage platform with basic features of Upload, Favourites, 
 
 
 ![logo](https://github.com/FaizAlam/PHOTOOS/blob/Master/public/uploads/icons/PHOTOOS_WHITE.png)
-![front-page](https://github.com/FaizAlam/PHOTOOS/blob/Master/public/uploads/icons/front.png =300x)
+<img src="https://github.com/FaizAlam/PHOTOOS/blob/Master/public/uploads/icons/front.png" width="300" height="300">
 ## Maintainers
 
 [@FaizAlam](https://github.com/FaizAlam).
 
 
+<!--
 ### Contributors
 
 This project exists thanks to all the people who contribute. 
 <a href="https://github.com/FaizAlam/PHOTOOS/graphs/contributors"><img src="https://opencollective.com/standard-readme/contributors.svg?width=890&button=false" /></a>
-
+-->
 
 
 ## Contributing
