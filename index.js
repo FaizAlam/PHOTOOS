@@ -20,6 +20,7 @@ const users = require('./model/user')
 //const Grid = require('gridfs-stream')
 const crypto = require('crypto')
 const path = require('path')
+const compression = require('compression')
 const cloudinary = require('./utils/cloudinary')
 const upload = require('./utils/multer')
 const user = require('./model/user')
@@ -47,6 +48,9 @@ app.use(express.static('./public'))
 app.use(expressLayouts)
 app.use(bodyParser.urlencoded())
 app.use(methodOverride('_method'))
+app.use(compression({
+    level:6
+}))
 //app.use(formidable())
 
 //SETUP MAIL OAUTH
