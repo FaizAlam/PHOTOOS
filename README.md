@@ -4,7 +4,7 @@ Photoos is an image storage platform with basic features of Upload, Favourites, 
 
 ![logo](https://github.com/FaizAlam/PHOTOOS/blob/Master/public/uploads/icons/PHOTOOS_WHITE.png)
 <br>
-<img src="https://github.com/FaizAlam/PHOTOOS/blob/Master/public/uploads/icons/front.png" width="400" >
+<img src="https://github.com/FaizAlam/PHOTOOS/blob/Master/public/uploads/icons/front.png" width="400" align="center">
 ## Maintainers
 
 [@FaizAlam](https://github.com/FaizAlam).
