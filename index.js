@@ -89,7 +89,7 @@ app.use(session({
     saveUninitialized:false,
     
 }))
-var mainURL = "https://photoos.herokuapp.com"
+var mainURL = "http://localhost"
 //for localhost 
 //for hereoku https://photoos.herokuapp.com
 app.use(function(req,res,next){
@@ -108,7 +108,7 @@ http.listen(server_port,function(){
     app.get('/MyUploads/:id', async (req,res)=>{
         const data = await users.findById(req.params.id)
                     .then((data)=>{
-                        console.log("User Found")
+                       // console.log("User Found")
                         })
                     .catch((err)=>{
                         req.status = "error"
@@ -153,7 +153,7 @@ http.listen(server_port,function(){
                         cloudinary_id : result.public_id 
                     }
                 }
-            },(err,success)=>{
+            },{upsert:true},(err,success)=>{
                 if(err){
                     req.status = "error"
                     req.message = "Error while uploading"
