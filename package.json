@@ -23,7 +23,7 @@
     "express-ejs-layouts": "^2.5.1",
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.2",
-    "googleapis": "^82.0.0",
+    "googleapis": "^124.0.0",
     "gridfs-stream": "^1.1.1",
     "http": "0.0.1-security",
     "method-override": "^3.0.0",
